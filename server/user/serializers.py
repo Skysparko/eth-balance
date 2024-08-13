@@ -1,15 +1,15 @@
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import get_user_model
-
+from django import forms
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
     password2 = serializers.CharField(style={"input_type": "password"})
-
+    wallet_address = serializers.CharField(max_length=42, required=True)
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email", "password", "password2")
+        fields = ("first_name", "last_name", "email", 'wallet_address', "password", "password2")
         extra_kwargs = {
             "password": {"write_only": True},
             "password2": {"write_only": True}
@@ -20,6 +20,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=self.validated_data["email"],
             first_name=self.validated_data["first_name"],
             last_name=self.validated_data["last_name"],
+            wallet_address=self.validated_data["wallet_address"],
         )
 
         password = self.validated_data["password"]
@@ -44,4 +45,4 @@ class LoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("id", "email", "is_staff", "first_name", "last_name")
+        fields = ("id", "email", "is_staff", "first_name", "last_name","wallet_address")
